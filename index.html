@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All-Time Cricket XI</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        h1 { color: #333; }
+        input { padding: 8px; width: 50px; margin: 5px; text-align: center; }
+        button { padding: 10px 20px; margin-top: 10px; cursor: pointer; background: blue; color: white; border: none; }
+        ul { list-style: none; padding: 0; }
+        li { background: #f4f4f4; padding: 10px; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>India's All-Time Best Cricket XI</h1>
+
+    <label for="batters">Batters:</label>
+    <input type="number" id="batters" min="6" max="11" value="7">
+
+    <label for="pacers">Pacers:</label>
+    <input type="number" id="pacers" min="2" max="5" value="3">
+
+    <label for="spinners">Spinners:</label>
+    <input type="number" id="spinners" min="2" max="5" value="2">
+
+    <br>
+    <button onclick="fetchTeam()">Get Best Team</button>
+    
+    <ul id="team-list"></ul>
+
+    <script>
+        async function fetchTeam() {
+            const bat = document.getElementById("batters").value;
+            const pace = document.getElementById("pacers").value;
+            const spin = document.getElementById("spinners").value;
+
+            try {
+                const response = await fetch(`https://cricketapi-e0fs.onrender.com/get_team?bat=${bat}&pace=${pace}&spin=${spin}`);
+                const data = await response.json();
+                
+                const team = data["team"];
+
+                document.getElementById("team-list").innerHTML = "";
+                
+                team.forEach(player => {
+                    const li = document.createElement("li");
+                    li.textContent = player;
+                    document.getElementById("team-list").appendChild(li);
+                });
+
+            } catch (error) {
+                console.error("Error fetching team:", error);
+            }
+        }
+    </script>
+</body>
+</html>
